@@ -128,10 +128,7 @@ body {
 
 /* Admin Panel */
 .admin-panel {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 2000;
+    display: none;
 }
 
 .admin-toggle {
@@ -1305,4 +1302,5 @@ body {
     .welcome-text {
         font-size: 1rem;
     }
+
 }
