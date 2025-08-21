@@ -348,4 +348,193 @@
                 });
             }, 1000);
         });
+// Contact Modal Functions
+function initContactModal() {
+    const contactBtn = document.getElementById('contactBtn');
+    const footerContactBtn = document.getElementById('footerContactBtn');
+    const modal = document.getElementById('contactModal');
+    const closeBtn = document.getElementById('closeBtn');
+    const form = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+
+    // Open modal when contact button is clicked
+    contactBtn.addEventListener('click', () => {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Open modal when footer contact button is clicked
+    footerContactBtn.addEventListener('click', () => {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Close modal when X is clicked
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        resetForm();
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            resetForm();
+        }
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent default submission temporarily
+
+        // Show loading state
+        const submitBtn = form.querySelector('.submit-btn');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+
+        // Create FormData object
+        const formData = new FormData(form);
+
+        // Submit to FormSpree
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                // Success - show success message
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+
+                // Reset form after 3 seconds and close modal
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    resetForm();
+                    showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
+                }, 3000);
+
+            } else {
+                throw new Error('Network response was not ok');
+            }
+        }).catch(error => {
+            // Error handling
+            console.error('Error:', error);
+            showNotification('Oops! There was a problem sending your message. Please try again or email me directly at tusharsaini1503@gmail.com', 'error');
+
+            // Reset button state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+
+    function resetForm() {
+        form.reset();
+        form.style.display = 'block';
+        successMessage.style.display = 'none';
+        const submitBtn = form.querySelector('.submit-btn');
+        submitBtn.textContent = 'Send Message';
+        submitBtn.disabled = false;
+    }
+}
+
+// Updated notification function with better styling
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.2rem;">
+                ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
+            </span>
+            <span>${message}</span>
+        </div>
+    `;
+
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        animation: slideInRight 0.4s ease;
+        max-width: 400px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        ${type === 'success' ? 'background: linear-gradient(135deg, #4CAF50, #45a049); border: 1px solid #4CAF50;' :
+            type === 'error' ? 'background: linear-gradient(135deg, #f44336, #da190b); border: 1px solid #f44336;' :
+                'background: linear-gradient(135deg, #2196F3, #1976D2); border: 1px solid #2196F3;'}
+    `;
+
+    // Add animation keyframes if not exists
+    if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    document.body.appendChild(notification);
+
+    // Auto remove after 6 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.4s ease forwards';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 400);
+    }, 6000);
+
+    // Remove on click
+    notification.addEventListener('click', () => {
+        notification.style.animation = 'slideOutRight 0.4s ease forwards';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 400);
+    });
+}
+function initFooterInteractions() {
+    // Footer contact button - make sure it opens the same modal
+    const footerContactBtn = document.getElementById('footerContactBtn');
+    if (footerContactBtn) {
+        footerContactBtn.addEventListener('click', () => {
+            document.getElementById('contactModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+    }
+}
     
