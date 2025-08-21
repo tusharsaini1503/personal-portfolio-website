@@ -1,7 +1,4 @@
 
-        // Admin password (you can change this)
-        const ADMIN_PASSWORD = "tushar123";
-        let isAdminLoggedIn = false;
 
         // Initialize animations and interactions
         document.addEventListener('DOMContentLoaded', function() {
@@ -51,77 +48,7 @@
             alert(content[type] || "Information coming soon!");
         }
 
-        // Admin Panel Functions
-        function initAdminPanel() {
-            const adminToggle = document.getElementById('adminToggle');
-            const adminContent = document.getElementById('adminContent');
-            
-            adminToggle.addEventListener('click', () => {
-                adminContent.classList.toggle('show');
-            });
-
-            // Close admin panel when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.admin-panel')) {
-                    adminContent.classList.remove('show');
-                }
-            });
-        }
-
-        function checkAdminPassword() {
-            const passwordInput = document.getElementById('adminPassword');
-            const password = passwordInput.value;
-            
-            if (password === ADMIN_PASSWORD) {
-                isAdminLoggedIn = true;
-                document.getElementById('adminLogin').style.display = 'none';
-                document.getElementById('messagesContainer').style.display = 'block';
-                passwordInput.value = '';
-                
-                // Show success message
-                showNotification("Admin access granted!", "success");
-            } else {
-                showNotification("Incorrect password!", "error");
-                passwordInput.value = '';
-            }
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 25px;
-                border-radius: 8px;
-                color: white;
-                font-weight: bold;
-                z-index: 10000;
-                animation: slideIn 0.3s ease;
-                max-width: 300px;
-                font-size: 0.9rem;
-                line-height: 1.4;
-                ${type === 'success' ? 'background: #00ff41; color: #000;' : 
-                  type === 'error' ? 'background: #ff4444;' : 
-                  'background: #0099ff;'}
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 5000);
-        }
-
-        function clearAllMessages() {
-            if (confirm('Are you sure you want to clear all messages?')) {
-                document.getElementById('messagesList').innerHTML = '';
-                showNotification("All messages cleared!", "success");
-            }
-        }
-
+       
         // Contact Modal Functions
         function initContactModal() {
             const contactBtn = document.getElementById('contactBtn');
@@ -538,3 +465,4 @@ function initFooterInteractions() {
     }
 }
     
+
