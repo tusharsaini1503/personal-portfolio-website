@@ -32,21 +32,31 @@
         <div class="modal-content">
             <span class="close-btn" id="closeBtn">&times;</span>
             <h2>Contact Me</h2>
-            <form class="contact-form" id="contactForm">
+            <form class="contact-form" id="contactForm" action="https://formspree.io/f/xjkoqnve" method="POST">
                 <div class="form-group">
-                    <input type="text" id="userName" placeholder="Your Name" required>
+                    <input type="text" name="name" id="userName" placeholder="Your Name" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" id="userEmail" placeholder="Your Email" required>
+                    <input type="email" name="_replyto" id="userEmail" placeholder="Your Email" required>
                 </div>
                 <div class="form-group">
-                    <input type="tel" id="userPhone" placeholder="Your Phone Number" required>
+                    <input type="tel" name="phone" id="userPhone" placeholder="Your Phone Number" required>
                 </div>
                 <div class="form-group">
-                    <textarea rows="5" id="userMessage" placeholder="Your Message" required></textarea>
+                    <textarea rows="5" name="message" id="userMessage" placeholder="Your Message" required></textarea>
                 </div>
+                <!-- Hidden fields for better email formatting -->
+                <input type="hidden" name="_subject" value="New Contact Form Submission from Portfolio">
+                <input type="hidden" name="_captcha" value="false">
+
                 <button type="submit" class="submit-btn">Send Message</button>
             </form>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage" style="display: none;">
+                <h3 style="color: #00ff41; margin-bottom: 15px;">✅ Message Sent Successfully!</h3>
+                <p>Thank you for reaching out! I'll get back to you soon.</p>
+            </div>
         </div>
     </div>
 
@@ -340,5 +350,6 @@
     <script src="https://kit.fontawesome.com/42ec894756.js" crossorigin="anonymous"></script>
     <script src="main.js"></script>
 </body>
+
 
 </html>
